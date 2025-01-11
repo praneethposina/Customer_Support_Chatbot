@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Model</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div id="chat-container">
+        <div class="chat-header">
+            <h1>Customer Support Bot</h1>
+        </div>
+        <div id="chat-history"></div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button" onclick="sendMessage()">Send</button>
+            <button id="clear-button" onclick="clearHistory()">Clear History</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        function appendMessage(message, isUser) {
+            const chatHistory = document.getElementById('chat-history');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'assistant-message'}`;
+            messageDiv.innerHTML = `
+                <div>${message.content}</div>
+                <div class="timestamp">${message.timestamp}</div>
+            `;
+            chatHistory.appendChild(messageDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                const userMessage = {
+                    content: message,
+                    timestamp: new Date().toLocaleString()
+                };
+                
+                appendMessage(userMessage, true);
+                
+                input.value = '';
+                
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ prompt: message })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    const history = data.conversation_history;
+                    const lastAssistantMsg = history[history.length - 1];
+                    
+                    appendMessage(lastAssistantMsg, false);
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        }
+
+        async function clearHistory() {
+            try {
+                await fetch('/clear', { method: 'POST' });
+                document.getElementById('chat-history').innerHTML = '';
+            } catch (error) {
+                console.error('Error clearing history:', error);
+            }
+        }
+
+        // Add event listener for Enter key
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
