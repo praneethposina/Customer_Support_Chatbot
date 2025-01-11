@@ -37,14 +37,19 @@ The fine-tuned model is hosted on Hugging Face:
 ## Screenshots
 
 ### Chatbot Interface
-[Insert chatbot interface screenshot]
+
+![Chatbot SS](https://github.com/user-attachments/assets/220aea77-bb2b-4f50-b6a4-0541434d85ef)
+
+![Chatbot SS2](https://github.com/user-attachments/assets/da440735-59d7-4be7-a43d-d51de8983738)
 
 ### AWS CloudWatch Monitoring
-[Insert CloudWatch monitoring screenshot]
+
+![CloudWatch SS](https://github.com/user-attachments/assets/9794bc3e-4b9c-4626-9a7f-3936d4757328)
 
 ### Docker Logs
-[Insert Docker logs screenshot]
 
+<img width="1270" alt="Docker ss" src="https://github.com/user-attachments/assets/a72d1c35-8203-4a05-b944-743ea6c0a6b8" />
+<img width="1268" alt="Docker ss2" src="https://github.com/user-attachments/assets/f1b0c0b1-2aad-462c-adf2-7a7ea9047a1a" />
 
 ## AWS Deployment
 
